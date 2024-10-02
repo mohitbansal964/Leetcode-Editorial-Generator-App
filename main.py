@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv, find_dotenv
 
 from models.code_info_model import CodeInfoModel
-from services.llm_chain_service import LLMChainService
+from services.leetcode_editorial_generator_service import LeetcodeEditorialGeneratorService
 
 # loading the API Keys from .env
 load_dotenv(find_dotenv(), override=True)
@@ -30,7 +30,7 @@ class Solution:
 """
 if __name__ == "__main__":
     openai_api_key = os.environ.get('OPENAI_API_KEY')
-    llm_chain_service = LLMChainService(openai_api_key)
+    llm_chain_service = LeetcodeEditorialGeneratorService(openai_api_key)
     code_info_model = CodeInfoModel()
     code_info_model.problem_heading = "590. N-ary Tree Postorder Traversal"
     code_info_model.description = "Postorder Traversal using recursion"

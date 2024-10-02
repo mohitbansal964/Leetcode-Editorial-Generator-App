@@ -6,7 +6,7 @@ from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
 from models.code_info_model import CodeInfoModel
 from constants.constants import Constants
 
-class LLMChainService:
+class LeetcodeEditorialGeneratorService:
     def __init__(self, openai_api_key):
         self.__llm_chain = ChatOpenAI(api_key=openai_api_key)
     
