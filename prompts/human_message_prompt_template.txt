@@ -1,0 +1,11 @@
+**Leetcode problem number and heading**
+{problem_heading}
+
+**Brief Solution Description**
+{description}
+
+**Programming Language**
+{lang}
+
+**Code**
+{code}
