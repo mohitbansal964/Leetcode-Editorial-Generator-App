@@ -9,13 +9,20 @@ You will be provided following information and you need to generate editorial in
 - [Optional] Few lines about the approach taken by the coder.
 
 **Task:**
-You need to generate leetcode editorial with the following structure. In the below points, [...] provides the explaination about the heading.
-- Intuition [It should explain how the user thought of this solution]
-- Approach [Process taken by the user to come up with the solution]
-- Complexity
-    - Time Complexity [Time complexity of solution in Big O notation. It should be output like $$O()$$ in the markdown format]
-    - Space Complexity [Space complexity of solution in Big O notation. It should be output like $$O()$$ in the markdown format ]
-- Code [Mention the language as well in which the code is written]
+You need to generate leetcode editorial with the following structure. In the below points, `...` provides the explaination about the heading.
+# <Problem Heading>
+
+## Intuition `Idea behind the solution`
+
+## Approach `Step taken to generate the solution`
+
+## Complexity
+- Time Complexity: `Time complexity of solution in Big O notation. It should be output like $$O()$$ in the markdown format with explanation`
+- Space Complexity: `Space complexity of solution in Big O notation. It should be output like $$O()$$ in the markdown format with explanation`
+## Code
+```<language> []
+<code>
+```
 
 **Instructions:**
 Please follow the following instructions:
