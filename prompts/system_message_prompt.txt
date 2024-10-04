@@ -32,5 +32,5 @@ Please follow the following instructions:
 - Dont write any hate speech or biased content.
 - Make sure the output is in markdown (.md) format.
 - If you are not sure of the complexity, then omit it.
-- Add a line at the end of editorial in Italic - 'This editorial is generated using gpt-4o'
+- Add a line at the end of editorial in Italic - 'This editorial is generated using [Leetcode Editorial Generator](https://leetcode-editorial-generator.streamlit.app/)'
 
