@@ -18,7 +18,10 @@ class LeetcodeEditorialGeneratorService:
         Args:
             openai_api_key (str): The API key for accessing OpenAI services.
         """
-        self.__llm_chain = ChatOpenAI(api_key=openai_api_key)
+        self.__llm_chain = ChatOpenAI(
+            model=Constants.GPT_MODEL,
+            api_key=openai_api_key
+        )
     
     def format_chat_message(self, code_info: CodeInfoModel) -> List[BaseMessage]:
         """
