@@ -1,80 +1,112 @@
 import os
 from dotenv import find_dotenv, load_dotenv
 import streamlit as st
-
 from src.models import CodeInfoModel
 from src.services import LeetcodeEditorialGeneratorService
 
-def initialize_environment():
-    """
-    Loads environment variables from a .env file.
-    """
-    load_dotenv(find_dotenv(), override=True)
+class LeetcodeEditorialGeneratorApp:
+    def __init__(self):
+        self.__api_key = self.__get_openai_api_key()
+        self.__editorial = ""
+        self.__has_error = False
+        self.__show_preview = False
+    
 
-def get_openai_api_key() -> str:
-    """
-    Retrieves the OpenAI API key from environment variables.
+    def __reinit(self):
+        self.__editorial = ""
+        self.__has_error = False
+        self.__show_preview = False
+    
+    def runner(self):
+        """
+        Main function to set up the Streamlit app.
+        """
+        self.__reinit()
+        st.set_page_config(page_title="Leetcode Editorial Generator", layout="wide")
+        st.title("Leetcode Editorial Generator")
+        st.caption("using OpenAI's gpt-4o")
+        st.warning("Users are advised to review the editorial before publishing.", icon="⚠️")
+        col1, col2 = st.columns(2)
+        with col1:
+            self.__generate_code_info_form()
+        with col2:
+            self.__display_output()
 
-    Returns:
-    -------
-    str
-        The OpenAI API key.
+        self.__display_preview()
 
-    Raises:
-    ------
-    EnvironmentError
-        If the OpenAI API key is not found in environment variables.
-    """
-    api_key = os.environ.get('OPENAI_API_KEY')
-    if not api_key:
-        raise EnvironmentError("OPENAI_API_KEY not found in environment variables.")
-    return api_key
+    def __initialize_environment(self):
+        """
+        Loads environment variables from a .env file.
+        """
+        load_dotenv(find_dotenv(), override=True)
 
-st.set_page_config(page_title="Leetcode Editorial Generator", layout="wide")
-st.title("Leetcode Editorial Generator")
-st.caption("using OpenAI's gpt-4o")
-st.warning("Users are advised to review the editorial before publishing.",icon="⚠️")
-# if 'openai_api_key' in st.session_state:
-#     openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password", value=st.session_state['openai_api_key'])
-# else:
-#     openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
-#     st.session_state['openai_api_key'] = openai_api_key
-initialize_environment()
+    def __get_openai_api_key(self) -> str:
+        """
+        Retrieves the OpenAI API key from environment variables.
 
-openai_api_key = get_openai_api_key()
-editorial = ""
-error_in_editorial_generation = False
-show_preview = False
+        Returns:
+        -------
+        str
+            The OpenAI API key.
+        """
+        self.__initialize_environment()
+        api_key = os.environ.get('OPENAI_API_KEY')
+        return api_key
 
-def leetcode_editorial_generator(code_info_model: CodeInfoModel):
-    global editorial, error_in_editorial_generation
-    # Instantiate LLM model
-    llm_chain_service = LeetcodeEditorialGeneratorService(openai_api_key)
-    # Prompt
-    messages = llm_chain_service.format_chat_message(code_info_model)
-    try:
-        # Run LLM model
-        editorial = llm_chain_service.invoke(messages)
-        error_in_editorial_generation = False
-    except:
-        error_in_editorial_generation = True
+    def __leetcode_editorial_generator(self, code_info_model: CodeInfoModel) -> str:
+        """
+        Generates a Leetcode editorial using the provided code information model.
 
-def generate_code_info_form():
-    global show_preview
-    with st.form("code_info_form", clear_on_submit = False):
-        if not openai_api_key:
-            st.info("Please add your OpenAI API key to continue.")
-        is_form_disabled = not openai_api_key
+        Parameters:
+        ----------
+        code_info_model : CodeInfoModel
+            The model containing code information.
+        
+        Returns:
+        -------
+        str
+            The generated editorial or an error message.
+        """
+        try:
+            llm_chain_service = LeetcodeEditorialGeneratorService(self.__api_key)
+            messages = llm_chain_service.format_chat_message(code_info_model)
+            editorial = llm_chain_service.invoke(messages)
+            self.__has_error = False
+            return editorial
+        except Exception as e:
+            print(e.with_traceback(e.__traceback__))
+            self.__has_error = True
+            return ""
+        
+    def __generate_sidebar_for_api_key(self):
+        if 'openai_api_key' in st.session_state:
+                self.__api_key = st.sidebar.text_input("OpenAI API Key", type="password", value=st.session_state['openai_api_key'])
+        else:
+            self.__api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+            st.session_state['openai_api_key'] = self.__api_key
 
-        code_info_model = CodeInfoModel()
-        code_info_model.problem_heading = st.text_input("Enter Problem Heading*", disabled=is_form_disabled)
-        code_info_model.description = st.text_area("Enter Brief Solution Description", disabled=is_form_disabled)
-        code_info_model.lang = st.text_input("Enter Solution Language*",disabled=is_form_disabled)
-        code_info_model.code = st.text_area("Enter Code*", height=500, disabled=is_form_disabled) 
-        show_preview_temp = st.checkbox("Show preview",disabled=is_form_disabled)
+    def __generate_code_info_form(self):
+        """
+        Generates a form for inputting code information and triggers editorial generation.
+        """
+        if not self.__api_key:
+            self.__generate_sidebar_for_api_key()
+        
+        with st.form("code_info_form", clear_on_submit=False):
+            if not self.__api_key:
+                st.info("Please add your OpenAI API key to continue.")
+            is_form_disabled = not self.__api_key
 
-        submitted = st.form_submit_button("Submit", disabled=is_form_disabled)
-        if submitted:
+            code_info_model = CodeInfoModel(
+                problem_heading=st.text_input("Enter Problem Heading*", disabled=is_form_disabled),
+                description=st.text_area("Enter Brief Solution Description", disabled=is_form_disabled),
+                lang=st.text_input("Enter Solution Language*", disabled=is_form_disabled),
+                code=st.text_area("Enter Code*", height=500, disabled=is_form_disabled)
+            )
+            show_preview = st.checkbox("Show preview", disabled=is_form_disabled)
+            submitted = st.form_submit_button("Submit", disabled=is_form_disabled)
+
+            if submitted:
                 if not code_info_model.problem_heading:
                     st.error("Please add Problem Heading")
                 elif not code_info_model.lang:
@@ -82,23 +114,33 @@ def generate_code_info_form():
                 elif not code_info_model.code:
                     st.error("Please add Code")
                 else:
-                    show_preview = show_preview_temp
+                    self.__show_preview = show_preview
                     with st.spinner('Generating...'):
-                        leetcode_editorial_generator(code_info_model)
+                        self.__editorial = self.__leetcode_editorial_generator(code_info_model)
 
-col1, col2 = st.columns(2)
-with col1:
-    generate_code_info_form()
-with col2:
-    st.subheader("Output")
-    if editorial:
-        st.code(editorial, language="markdown")
-    elif error_in_editorial_generation:
-        st.error("Failed to generate editorial. Please check your OpenAI API key.")
-    else:
-        st.markdown("*Please submit form to generate editorial!*")
+    def __display_output(self):
+        """
+        Displays the generated editorial or a prompt to submit the form.
+        """
+        st.subheader("Output")
+        if self.__editorial:
+            st.code(self.__editorial, language="markdown")
+        elif self.__has_error:
+            st.error("Failed to generate editorial. Please try again later.")
+        else:
+            st.markdown("*Please submit form to generate editorial!*")
 
-if show_preview and not error_in_editorial_generation:
-    with st.container(border= True):
-        st.subheader("Preview")
-        st.markdown(editorial)
+    def __display_preview(self):
+        """
+        Displays a preview of the generated editorial if enabled.
+        """
+        if self.__show_preview and not self.__has_error:
+            with st.container(border= True):
+                st.subheader("Preview")
+                st.markdown(self.__editorial)
+
+    
+
+if __name__ == "__main__":
+    app = LeetcodeEditorialGeneratorApp()
+    app.runner()
