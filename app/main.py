@@ -36,5 +36,4 @@ if __name__ == "__main__":
     code_info_model.description = "Postorder Traversal using recursion"
     code_info_model.lang = "Python3"
     code_info_model.code = code
-    messages = llm_chain_service.format_chat_message(code_info_model)
-    print(llm_chain_service.invoke(messages))
+    print(llm_chain_service.invoke(code_info_model))
