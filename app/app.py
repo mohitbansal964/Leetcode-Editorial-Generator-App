@@ -1,7 +1,7 @@
 import streamlit as st
 
-from models.code_info_model import CodeInfoModel
-from services.leetcode_editorial_generator_service import LeetcodeEditorialGeneratorService
+from src.models import CodeInfoModel
+from src.services import LeetcodeEditorialGeneratorService
 
 st.set_page_config(page_title="Leetcode Editorial Generator", layout="wide")
 st.title("Leetcode Editorial Generator")

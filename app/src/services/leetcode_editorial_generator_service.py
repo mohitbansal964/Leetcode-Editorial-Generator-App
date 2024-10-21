@@ -3,8 +3,8 @@ from typing import List
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, BaseMessage
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
-from models.code_info_model import CodeInfoModel
-from constants.constants import Constants
+from src.models import CodeInfoModel
+from src.constants import Constants
 
 class LeetcodeEditorialGeneratorService:
     """

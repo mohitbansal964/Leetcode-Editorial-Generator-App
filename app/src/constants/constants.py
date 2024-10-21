@@ -1,3 +1,6 @@
+import os
+
+
 class Constants:
     """
     A class to encapsulate constant values used throughout the application.
@@ -8,7 +11,7 @@ class Constants:
         HUMAN_MSG_FILE_NAME (str): The file name for the human message prompt template.
     """
 
-    BASE_FILE_PATH: str = "prompts"
+    BASE_FILE_PATH: str = os.path.join("src", "prompts")
     SYS_MSG_FILE_NAME: str = "system_message_prompt.txt"
     HUMAN_MSG_FILE_NAME: str = "human_message_prompt_template.txt"
     GPT_MODEL: str = "gpt-4o"
