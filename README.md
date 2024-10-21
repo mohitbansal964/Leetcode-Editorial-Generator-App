@@ -1,4 +1,4 @@
- # Leetcode Editorial Generator Service
+# Leetcode Editorial Generator App
 
 ## Overview
 
@@ -14,7 +14,7 @@ The Leetcode Editorial Generator Service is a Python-based application designed 
 
 1. **Clone the Repository**:
     ```bash
-    git clone https://github.com/yourusername/leetcode-editorial-generator.git
+    git clone https://github.com/mohitbansal964/leetcode-editorial-generator.git
     cd leetcode-editorial-generator
     ```
 
@@ -46,29 +46,40 @@ The Leetcode Editorial Generator Service is a Python-based application designed 
 ## Usage
 
 ### Example Code
-Refer to main.py file for example code
+Refer to `main.py` for example code.
 
 ## Directory Structure
 ```
-leetcode-editorial-generator/
-├── prompts/
-│   ├── system_message_prompt.txt
-│   └── human_message_prompt_template.txt
-├── models/
-│   └── code_info_model.py
-├── services/
-│   └── leetcode_editorial_generator_service.py
-├── constants/
-│   └── constants.py
-├── requirements.txt
+LEETCODE-EDITORIAL-GENERATOR-APP/
+├── app/
+│   ├── src/
+│   │   ├── constants/
+│   │   │   ├── __init__.py
+│   │   │   └── constants.py
+│   │   ├── models/
+│   │   │   ├── __init__.py
+│   │   │   └── code_info_model.py
+│   │   ├── prompts/
+│   │   │   ├── human_message_prompt_template.txt
+│   │   │   └── system_message_prompt.txt
+│   │   ├── services/
+│   │   │   ├── __init__.py
+│   │   │   └── leetcode_editorial_generator_service.py
+│   │   └── __init__.py
+│   ├── app.py
+│   ├── main.py
+│   └── __init__.py
+├── .gitignore
+├── LICENSE
 ├── README.md
-└── main.py
+└── requirements.txt
 ```
+
 ## Further Enhancements
-1. **Validation**: Add validation to ensure that the properties in CodeInfoModel are set with valid values.
-2. **Serialization**: Implement methods to serialize and deserialize the CodeInfoModel object to and from JSON.
+1. **Validation**: Add validation to ensure that the properties in `CodeInfoModel` are set with valid values.
+2. **Serialization**: Implement methods to serialize and deserialize the `CodeInfoModel` object to and from JSON.
 3. **Configuration Management**: Consider using a configuration file or environment variables for better management of constants and API keys.
 4. **Error Handling**: Enhance error handling to manage potential issues such as file not found errors or API call failures.
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](https://github.com/mohitbansal964/Leetcode-Editorial-Generator-App/blob/main/LICENSE) file for details
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/mohitbansal964/Leetcode-Editorial-Generator-App/blob/main/LICENSE) file for details.
