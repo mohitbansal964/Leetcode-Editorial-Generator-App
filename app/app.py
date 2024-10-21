@@ -11,7 +11,6 @@ class LeetcodeEditorialGeneratorApp:
         self.__has_error = False
         self.__show_preview = False
     
-
     def __reinit(self):
         self.__editorial = ""
         self.__has_error = False
@@ -22,8 +21,8 @@ class LeetcodeEditorialGeneratorApp:
         Main function to set up the Streamlit app.
         """
         self.__reinit()
-        st.set_page_config(page_title="Leetcode Editorial Generator", layout="wide")
-        st.title("Leetcode Editorial Generator")
+        st.set_page_config(page_title="Leetcode Editorial Generator", layout="wide", page_icon="📝")
+        st.title("Leetcode Editorial Generator 📝")
         st.caption("using OpenAI's gpt-4o")
         st.warning("Users are advised to review the editorial before publishing.", icon="⚠️")
         col1, col2 = st.columns(2)
@@ -79,9 +78,9 @@ class LeetcodeEditorialGeneratorApp:
         
     def __generate_sidebar_for_api_key(self):
         if 'openai_api_key' in st.session_state:
-                self.__api_key = st.sidebar.text_input("OpenAI API Key", type="password", value=st.session_state['openai_api_key'])
+            self.__api_key = st.sidebar.text_input("🔑 OpenAI API Key", type="password", value=st.session_state['openai_api_key'])
         else:
-            self.__api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+            self.__api_key = st.sidebar.text_input("🔑 OpenAI API Key", type="password")
             st.session_state['openai_api_key'] = self.__api_key
 
     def __generate_code_info_form(self):
@@ -97,13 +96,13 @@ class LeetcodeEditorialGeneratorApp:
             is_form_disabled = not self.__api_key
 
             code_info_model = CodeInfoModel(
-                problem_heading=st.text_input("Enter Problem Heading*", disabled=is_form_disabled),
-                description=st.text_area("Enter Brief Solution Description", disabled=is_form_disabled),
-                lang=st.text_input("Enter Solution Language*", disabled=is_form_disabled),
-                code=st.text_area("Enter Code*", height=500, disabled=is_form_disabled)
+                problem_heading=st.text_input("🧩 Enter Problem Heading*", disabled=is_form_disabled),
+                description=st.text_area("📝 Enter Brief Solution Description", disabled=is_form_disabled),
+                lang=st.text_input("⚙️ Enter Solution Language*", disabled=is_form_disabled),
+                code=st.text_area("💻 Enter Code*", height=500, disabled=is_form_disabled)
             )
-            show_preview = st.checkbox("Show preview", disabled=is_form_disabled)
-            submitted = st.form_submit_button("Submit", disabled=is_form_disabled)
+            show_preview = st.checkbox("👁️ Show preview", disabled=is_form_disabled)
+            submitted = st.form_submit_button("🚀 Submit", disabled=is_form_disabled)
 
             if submitted:
                 if not code_info_model.problem_heading:
@@ -135,10 +134,8 @@ class LeetcodeEditorialGeneratorApp:
         """
         if self.__show_preview and not self.__has_error:
             with st.container(border= True):
-                st.subheader("Preview")
+                st.subheader("👁️ Preview")
                 st.markdown(self.__editorial)
-
-    
 
 if __name__ == "__main__":
     app = LeetcodeEditorialGeneratorApp()
