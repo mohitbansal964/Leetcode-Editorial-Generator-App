@@ -3,8 +3,8 @@ from typing import List
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, BaseMessage
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
-from models.code_info_model import CodeInfoModel
-from constants.constants import Constants
+from src.models import CodeInfoModel
+from src.constants import Constants
 
 class LeetcodeEditorialGeneratorService:
     """
@@ -18,7 +18,7 @@ class LeetcodeEditorialGeneratorService:
         Args:
             openai_api_key (str): The API key for accessing OpenAI services.
         """
-        self.__llm_chain = ChatOpenAI(
+        self.__llm = ChatOpenAI(
             model=Constants.GPT_MODEL,
             api_key=openai_api_key
         )
@@ -51,7 +51,7 @@ class LeetcodeEditorialGeneratorService:
         Returns:
             str: The content of the language model's response.
         """
-        output = self.__llm_chain.invoke(messages)
+        output = self.__llm.invoke(messages)
         return output.content
     
     def __create_chat_prompt_template(self) -> ChatPromptTemplate:

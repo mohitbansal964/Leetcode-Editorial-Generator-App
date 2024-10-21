@@ -1,18 +1,47 @@
+import os
+from dotenv import find_dotenv, load_dotenv
 import streamlit as st
 
-from models.code_info_model import CodeInfoModel
-from services.leetcode_editorial_generator_service import LeetcodeEditorialGeneratorService
+from src.models import CodeInfoModel
+from src.services import LeetcodeEditorialGeneratorService
+
+def initialize_environment():
+    """
+    Loads environment variables from a .env file.
+    """
+    load_dotenv(find_dotenv(), override=True)
+
+def get_openai_api_key() -> str:
+    """
+    Retrieves the OpenAI API key from environment variables.
+
+    Returns:
+    -------
+    str
+        The OpenAI API key.
+
+    Raises:
+    ------
+    EnvironmentError
+        If the OpenAI API key is not found in environment variables.
+    """
+    api_key = os.environ.get('OPENAI_API_KEY')
+    if not api_key:
+        raise EnvironmentError("OPENAI_API_KEY not found in environment variables.")
+    return api_key
 
 st.set_page_config(page_title="Leetcode Editorial Generator", layout="wide")
 st.title("Leetcode Editorial Generator")
 st.caption("using OpenAI's gpt-4o")
 st.warning("Users are advised to review the editorial before publishing.",icon="⚠️")
-if 'openai_api_key' in st.session_state:
-    openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password", value=st.session_state['openai_api_key'])
-else:
-    openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
-    st.session_state['openai_api_key'] = openai_api_key
+# if 'openai_api_key' in st.session_state:
+#     openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password", value=st.session_state['openai_api_key'])
+# else:
+#     openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+#     st.session_state['openai_api_key'] = openai_api_key
+initialize_environment()
 
+openai_api_key = get_openai_api_key()
 editorial = ""
 error_in_editorial_generation = False
 show_preview = False

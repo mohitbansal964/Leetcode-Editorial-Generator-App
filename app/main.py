@@ -1,8 +1,8 @@
 import os
 from dotenv import load_dotenv, find_dotenv
 
-from models.code_info_model import CodeInfoModel
-from services.leetcode_editorial_generator_service import LeetcodeEditorialGeneratorService
+from src.models import CodeInfoModel
+from src.services import LeetcodeEditorialGeneratorService
 
 # loading the API Keys from .env
 load_dotenv(find_dotenv(), override=True)
