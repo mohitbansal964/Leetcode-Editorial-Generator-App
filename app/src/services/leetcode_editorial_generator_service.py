@@ -1,10 +1,10 @@
 import os
-from typing import List
 from langchain_openai import ChatOpenAI
-from langchain_core.messages import SystemMessage, BaseMessage
+from langchain_core.messages import SystemMessage
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
 from src.models import CodeInfoModel
 from src.constants import Constants
+from langchain_core.output_parsers import StrOutputParser
 
 class LeetcodeEditorialGeneratorService:
     """
@@ -22,26 +22,9 @@ class LeetcodeEditorialGeneratorService:
             model=Constants.GPT_MODEL,
             api_key=openai_api_key
         )
+        self.__parser = StrOutputParser()
     
-    def format_chat_message(self, code_info: CodeInfoModel) -> List[BaseMessage]:
-        """
-        Formats the chat messages based on the provided code information.
-        
-        Args:
-            code_info (CodeInfoModel): The model containing code information.
-        
-        Returns:
-            List[BaseMessage]: A list of formatted chat messages.
-        """
-        chat_template = self.__create_chat_prompt_template()
-        return chat_template.format_messages(
-            problem_heading=code_info.problem_heading, 
-            description=code_info.description,
-            lang=code_info.lang,
-            code=code_info.code
-        )
-    
-    def invoke(self, messages: List[BaseMessage]) -> str:
+    def invoke(self, code_info: CodeInfoModel) -> str:
         """
         Invokes the language model with the provided messages and returns the output.
         
@@ -51,8 +34,10 @@ class LeetcodeEditorialGeneratorService:
         Returns:
             str: The content of the language model's response.
         """
-        output = self.__llm.invoke(messages)
-        return output.content
+        llm_chain = self.__create_chat_prompt_template() \
+                    | self.__llm \
+                    | self.__parser
+        return llm_chain.invoke(code_info.__dict__)
     
     def __create_chat_prompt_template(self) -> ChatPromptTemplate:
         """

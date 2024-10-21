@@ -69,8 +69,7 @@ class LeetcodeEditorialGeneratorApp:
         """
         try:
             llm_chain_service = LeetcodeEditorialGeneratorService(self.__api_key)
-            messages = llm_chain_service.format_chat_message(code_info_model)
-            editorial = llm_chain_service.invoke(messages)
+            editorial = llm_chain_service.invoke(code_info_model)
             self.__has_error = False
             return editorial
         except Exception as e:
