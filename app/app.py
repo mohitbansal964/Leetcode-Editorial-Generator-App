@@ -23,7 +23,7 @@ class LeetcodeEditorialGeneratorApp:
         self.__reinit()
         st.set_page_config(page_title="Leetcode Editorial Generator", layout="wide", page_icon="📝")
         st.title("Leetcode Editorial Generator 📝")
-        st.caption("using OpenAI's gpt-4o")
+        st.caption("using OpenAI's gpt-4.1 model")
         st.warning("Users are advised to review the editorial before publishing.", icon="⚠️")
         col1, col2 = st.columns(2)
         with col1:
